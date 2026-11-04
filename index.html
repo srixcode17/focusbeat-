@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="system">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>FocusBeat — Apple-Inspired Productivity & Generative Audio</title>
+  <meta name="description" content="FocusBeat combines an advanced Pomodoro timer with a real-time native Web Audio generative sound engine. Minimal, refined, and completely distraction-free.">
+  <meta name="theme-color" content="#F5F5F7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+  
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Ambient Atmospheric Lighting Mesh (Dynamic Soundscape Aura) -->
+  <div class="ambient-glow-mesh" aria-hidden="true">
+    <div class="aura-blob aura-blob-1"></div>
+    <div class="aura-blob aura-blob-2"></div>
+  </div>
+
+  <!-- App Header & Navigation -->
+  <header class="app-header" role="banner">
+    <div class="header-inner">
+      <!-- Brand Logo & Wordmark -->
+      <a href="#focus" class="brand-link" id="brand-link" aria-label="FocusBeat Home">
+        <svg class="brand-glyph" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="2.2" opacity="0.25"/>
+          <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="2.2" stroke-dasharray="87.96" stroke-dashoffset="24" stroke-linecap="round"/>
+          <circle cx="16" cy="16" r="4.5" fill="currentColor"/>
+        </svg>
+        <span class="brand-text">FocusBeat</span>
+      </a>
+
+      <!-- Primary View Navigation (Segmented Switcher) -->
+      <nav class="view-nav" role="navigation" aria-label="Main Navigation">
+        <div class="segmented-control" role="tablist">
+          <button type="button" class="segment-btn active" role="tab" id="tab-focus" aria-selected="true" aria-controls="view-focus" data-view="focus">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span>Focus</span>
+          </button>
+          <button type="button" class="segment-btn" role="tab" id="tab-soundscape" aria-selected="false" aria-controls="view-soundscape" data-view="soundscape">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+            <span>Soundscape</span>
+          </button>
+          <button type="button" class="segment-btn" role="tab" id="tab-insights" aria-selected="false" aria-controls="view-insights" data-view="insights">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+            <span>Insights</span>
+          </button>
+          <span class="segment-slider" aria-hidden="true"></span>
+        </div>
+      </nav>
+
+      <!-- Utility Actions: Appearance Toggle & Settings -->
+      <div class="header-actions">
+        <button type="button" class="icon-btn theme-toggle" id="theme-toggle-btn" aria-label="Toggle light and dark appearance" title="Toggle Appearance">
+          <!-- Sun Icon (for Dark mode) -->
+          <svg class="theme-icon sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+          <!-- Moon Icon (for Light mode) -->
+          <svg class="theme-icon moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+
+        <button type="button" class="icon-btn settings-btn" id="open-settings-btn" aria-label="Open Settings" title="Settings (Esc to close)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main View Area -->
+  <main class="main-content" id="main-content">
+
+    <!-- 1. FOCUS EXPERIENCE -->
+    <section class="view-panel active" id="view-focus" role="tabpanel" aria-labelledby="tab-focus">
+      <div class="focus-container">
+        
+        <!-- Mode Selector: Focus / Short Break / Long Break -->
+        <div class="mode-selector-wrapper">
+          <div class="mode-segmented" role="radiogroup" aria-label="Pomodoro Mode Selector">
+            <button type="button" class="mode-btn active" role="radio" aria-checked="true" id="mode-focus" data-mode="focus">
+              Focus
+            </button>
+            <button type="button" class="mode-btn" role="radio" aria-checked="false" id="mode-shortBreak" data-mode="shortBreak">
+              Short Break
+            </button>
+            <button type="button" class="mode-btn" role="radio" aria-checked="false" id="mode-longBreak" data-mode="longBreak">
+              Long Break
+            </button>
+            <span class="mode-slider" aria-hidden="true"></span>
+          </div>
+        </div>
+
+        <!-- Central Circular Timer (Airy, Unboxed Apple Ring) -->
+        <div class="timer-centerpiece">
+          <div class="circular-progress-wrap">
+            <svg class="progress-ring-svg" viewBox="0 0 360 360" aria-hidden="true">
+              <defs>
+                <linearGradient id="timer-ring-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" class="ring-stop-1" />
+                  <stop offset="100%" class="ring-stop-2" />
+                </linearGradient>
+              </defs>
+              <!-- Background subtle track -->
+              <circle class="ring-bg" cx="180" cy="180" r="150" />
+              <!-- Animated foreground active ring with dynamic soundscape gradient -->
+              <circle class="ring-progress" id="ring-progress" cx="180" cy="180" r="150" stroke="url(#timer-ring-gradient)" />
+            </svg>
+
+            <!-- Inner Timer Details -->
+            <div class="timer-center-content">
+              <span class="session-category-badge" id="session-badge">FOCUS</span>
+              <div class="countdown-digits" id="timer-countdown" aria-live="polite" aria-atomic="true">25:00</div>
+              <div class="session-state-text" id="session-state-text">Ready to focus</div>
+            </div>
+          </div>
+
+          <!-- Primary & Secondary Controls -->
+          <div class="timer-actions">
+            <button type="button" class="btn-icon-secondary" id="timer-reset-btn" aria-label="Reset timer" title="Reset Session">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                <path d="M3 3v5h5"/>
+              </svg>
+            </button>
+
+            <button type="button" class="btn-primary-action" id="timer-toggle-btn" aria-label="Start session">
+              <svg class="btn-icon-play" id="btn-icon-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <polygon points="6 4 20 12 6 20 6 4"/>
+              </svg>
+              <svg class="btn-icon-pause" id="btn-icon-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="display: none;">
+                <rect x="6" y="4" width="4" height="16" rx="1.5"/>
+                <rect x="14" y="4" width="4" height="16" rx="1.5"/>
+              </svg>
+              <span id="timer-btn-label">Start</span>
+            </button>
+
+            <button type="button" class="btn-icon-secondary" id="timer-skip-btn" aria-label="Skip to next session" title="Skip Session">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polygon points="5 4 15 12 5 20 5 4"/>
+                <line x1="19" y1="5" x2="19" y2="19"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Cycle Tracking & Daily Score -->
+          <div class="cycle-status-row">
+            <div class="cycle-pill" id="cycle-pill">
+              <span class="cycle-label">Round <strong id="cycle-current-num">1</strong> of <span id="cycle-total-num">4</span></span>
+              <div class="cycle-dots" id="cycle-dots" aria-hidden="true">
+                <span class="dot active"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+              </div>
+            </div>
+
+            <div class="completed-today-pill">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <span>Today: <strong id="today-completed-count">0</strong></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Focus Ambient Quick Selection -->
+        <div class="focus-ambient-bar">
+          <div class="ambient-bar-label">
+            <span class="ambient-indicator-pulse"></span>
+            <span>Generative Ambience:</span>
+            <strong id="focus-soundscape-name">Deep Focus</strong>
+          </div>
+          <button type="button" class="btn-text-subtle" id="jump-to-soundscape-btn">Change Ambience →</button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 2. SOUNDSCAPE STUDIO EXPERIENCE -->
+    <section class="view-panel" id="view-soundscape" role="tabpanel" aria-labelledby="tab-soundscape" hidden>
+      <div class="soundscape-container">
+        
+        <header class="section-heading">
+          <div class="heading-copy">
+            <h1 class="heading-title">Generative Ambient Studio</h1>
+            <p class="heading-subtitle">Real-time dynamic soundscapes computed exclusively via the native Web Audio API. Zero external audio downloads.</p>
+          </div>
+
+          <div class="preset-action-bar">
+            <button type="button" class="btn-save-mix" id="open-save-mix-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+              <span>Save Custom Mix</span>
+            </button>
+          </div>
+        </header>
+
+        <!-- Presets Row (Apple Music Curated Stations Style) -->
+        <div class="presets-section">
+          <h2 class="subheading">Curated Soundscapes</h2>
+          <div class="presets-pill-list" id="presets-container" role="radiogroup" aria-label="Soundscape Presets">
+            <button type="button" class="preset-chip active" role="radio" aria-checked="true" data-preset="deep-focus">
+              <div class="preset-card-art preset-art-deep-focus" aria-hidden="true"></div>
+              <div class="preset-card-content">
+                <div class="preset-header-row">
+                  <span class="preset-badge">Deep Work</span>
+                  <span class="preset-live-indicator" aria-hidden="true"></span>
+                </div>
+                <span class="preset-name">Deep Focus</span>
+                <span class="preset-desc">Brown noise + subtle rain</span>
+              </div>
+            </button>
+            <button type="button" class="preset-chip" role="radio" aria-checked="false" data-preset="rainy-library">
+              <div class="preset-card-art preset-art-rainy-library" aria-hidden="true"></div>
+              <div class="preset-card-content">
+                <div class="preset-header-row">
+                  <span class="preset-badge">Atmosphere</span>
+                  <span class="preset-live-indicator" aria-hidden="true"></span>
+                </div>
+                <span class="preset-name">Rainy Library</span>
+                <span class="preset-desc">Rain + distant air</span>
+              </div>
+            </button>
+            <button type="button" class="preset-chip" role="radio" aria-checked="false" data-preset="cozy-evening">
+              <div class="preset-card-art preset-art-cozy-evening" aria-hidden="true"></div>
+              <div class="preset-card-content">
+                <div class="preset-header-row">
+                  <span class="preset-badge">Warmth</span>
+                  <span class="preset-live-indicator" aria-hidden="true"></span>
+                </div>
+                <span class="preset-name">Cozy Evening</span>
+                <span class="preset-desc">Fireplace + soft rain</span>
+              </div>
+            </button>
+            <button type="button" class="preset-chip" role="radio" aria-checked="false" data-preset="creative-flow">
+              <div class="preset-card-art preset-art-creative-flow" aria-hidden="true"></div>
+              <div class="preset-card-content">
+                <div class="preset-header-row">
+                  <span class="preset-badge">Rhythm</span>
+                  <span class="preset-live-indicator" aria-hidden="true"></span>
+                </div>
+                <span class="preset-name">Creative Flow</span>
+                <span class="preset-desc">Pink noise + mechanical keys</span>
+              </div>
+            </button>
+            <button type="button" class="preset-chip" role="radio" aria-checked="false" data-preset="ocean-calm">
+              <div class="preset-card-art preset-art-ocean-calm" aria-hidden="true"></div>
+              <div class="preset-card-content">
+                <div class="preset-header-row">
+                  <span class="preset-badge">Coastal</span>
+                  <span class="preset-live-indicator" aria-hidden="true"></span>
+                </div>
+                <span class="preset-name">Ocean Calm</span>
+                <span class="preset-desc">Ocean surf + soft wind</span>
+              </div>
+            </button>
+            <button type="button" class="preset-chip" role="radio" aria-checked="false" data-preset="minimal-focus">
+              <div class="preset-card-art preset-art-minimal-focus" aria-hidden="true"></div>
+              <div class="preset-card-content">
+                <div class="preset-header-row">
+                  <span class="preset-badge">Isolation</span>
+                  <span class="preset-live-indicator" aria-hidden="true"></span>
+                </div>
+                <span class="preset-name">Minimal Focus</span>
+                <span class="preset-desc">Pure organic brown noise</span>
+              </div>
+            </button>
+          </div>
+
+          <!-- Custom Mixes Row (if any) -->
+          <div class="custom-mixes-row" id="custom-mixes-wrapper" style="display: none;">
+            <h3 class="subheading-small">My Saved Mixes</h3>
+            <div class="presets-pill-list" id="custom-mixes-container"></div>
+          </div>
+        </div>
+
+        <!-- Sound Channel Grids categorized -->
+        
+        <!-- Category A: Noise Generators -->
+        <div class="channel-group">
+          <div class="group-header">
+            <h2 class="group-title">Noise Generators</h2>
+            <span class="group-caption">Continuous acoustic spectrums designed to mask background office and home distractions.</span>
+          </div>
+          <div class="channel-grid" id="grid-noise"></div>
+        </div>
+
+        <!-- Category B: Nature Ambience -->
+        <div class="channel-group">
+          <div class="group-header">
+            <h2 class="group-title">Nature Ambience</h2>
+            <span class="group-caption">Algorithmic environmental soundscapes crafted with organic stochastic modulation.</span>
+          </div>
+          <div class="channel-grid" id="grid-nature"></div>
+        </div>
+
+        <!-- Category C: Workspace Ambience -->
+        <div class="channel-group">
+          <div class="group-header">
+            <h2 class="group-title">Workspace Ambience</h2>
+            <span class="group-caption">Synthesized tactile textures evoking a calm study, coffeehouse, or studio.</span>
+          </div>
+          <div class="channel-grid" id="grid-workspace"></div>
+        </div>
+
+        <!-- Category D: Binaural Focus Tones -->
+        <div class="channel-group">
+          <div class="group-header">
+            <div class="group-header-with-badge">
+              <h2 class="group-title">Binaural Focus Tones</h2>
+              <span class="badge-headphones">Headphones Required</span>
+            </div>
+            <p class="group-caption">
+              Isolated stereophonic frequency offsets calibrated across the left and right audio channels. 
+              The displayed frequency represents the interaural cognitive difference.
+            </p>
+          </div>
+
+          <div class="channel-grid" id="grid-binaural"></div>
+
+          <!-- Binaural Disclaimer Banner -->
+          <aside class="disclaimer-banner" role="note">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <p><strong>Note:</strong> Binaural focus tones are designed as calming ambient soundscapes. They are not medical treatments or scientifically guaranteed cognitive enhancements. Please listen at a moderate volume.</p>
+          </aside>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 3. INSIGHTS & ANALYTICS EXPERIENCE -->
+    <section class="view-panel" id="view-insights" role="tabpanel" aria-labelledby="tab-insights" hidden>
+      <div class="insights-container">
+        
+        <header class="section-heading">
+          <div class="heading-copy">
+            <h1 class="heading-title">Productivity Insights</h1>
+            <p class="heading-subtitle">A mindful perspective on your deep-work consistency and daily focus habits.</p>
+          </div>
+
+          <div class="insights-actions">
+            <button type="button" class="btn-subtle" id="export-history-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <span>Export JSON</span>
+            </button>
+            <button type="button" class="btn-subtle-danger" id="clear-history-btn">Clear History</button>
+          </div>
+        </header>
+
+        <!-- Metric Cards (Apple Health / Fitness+ Typography Style) -->
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <span class="metric-label">Focus Today</span>
+            <div class="metric-value" id="insight-today-time">0m</div>
+            <span class="metric-hint">Dedicated focus time</span>
+          </div>
+
+          <div class="metric-card">
+            <span class="metric-label">Completed Sessions</span>
+            <div class="metric-value" id="insight-today-sessions">0</div>
+            <span class="metric-hint">Pomodoros finished</span>
+          </div>
+
+          <div class="metric-card">
+            <span class="metric-label">Day Streak</span>
+            <div class="metric-value" id="insight-streak">0 days</div>
+            <span class="metric-hint">Consecutive active days</span>
+          </div>
+
+          <div class="metric-card">
+            <span class="metric-label">Favorite Ambience</span>
+            <div class="metric-value metric-value-text" id="insight-favorite-sound">Deep Focus</div>
+            <span class="metric-hint">Most utilized soundscape</span>
+          </div>
+        </div>
+
+        <!-- Weekly Focus Activity Chart -->
+        <div class="chart-panel">
+          <div class="chart-header">
+            <div>
+              <h2 class="panel-title">Weekly Focus Activity</h2>
+              <span class="panel-subtitle">Past 7 calendar days</span>
+            </div>
+            <div class="weekly-total-badge">
+              <span>Total: <strong id="weekly-total-time">0h 0m</strong></span>
+            </div>
+          </div>
+
+          <!-- Apple Health Style Minimalist Bar Chart -->
+          <div class="weekly-chart" id="weekly-chart" aria-label="Weekly focus minutes bar chart"></div>
+        </div>
+
+        <!-- Chronological Session History (Apple Inset Grouped Table View) -->
+        <div class="history-panel">
+          <div class="history-header">
+            <h2 class="panel-title">Recent Sessions</h2>
+            <span class="panel-subtitle" id="history-total-count">0 recorded</span>
+          </div>
+
+          <div class="history-list-wrapper">
+            <div class="history-list" id="history-list" role="list">
+              <div class="history-empty" id="history-empty">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/></svg>
+                <p>No focus sessions recorded yet. Start your first session above to begin tracking your deep work.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Persistent Floating Master Player Dock (Apple Control Center / Dynamic Island) -->
+  <aside class="master-dock" role="region" aria-label="Master Audio Player">
+    <div class="dock-inner">
+      
+      <!-- Dock Left: Soundscape info & active badges -->
+      <div class="dock-info">
+        <button type="button" class="dock-play-toggle" id="dock-master-play-btn" aria-label="Toggle soundscape playback">
+          <svg class="dock-play-icon" id="dock-play-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <polygon points="6 4 20 12 6 20 6 4"/>
+          </svg>
+          <svg class="dock-pause-icon" id="dock-pause-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="display: none;">
+            <rect x="6" y="4" width="4" height="16" rx="1.5"/>
+            <rect x="14" y="4" width="4" height="16" rx="1.5"/>
+          </svg>
+        </button>
+
+        <div class="dock-meta">
+          <span class="dock-sound-title" id="dock-sound-title">Deep Focus</span>
+          <div class="dock-channels-summary" id="dock-channels-summary">
+            <span class="channel-pill">Brown Noise</span>
+            <span class="channel-pill">Rain</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dock Center: Fluid Siri-style Realtime Waveform Visualizer -->
+      <div class="dock-visualizer-wrap" aria-hidden="true">
+        <canvas class="dock-visualizer-canvas" id="dock-visualizer" width="180" height="36"></canvas>
+      </div>
+
+      <!-- Dock Right: Volume, Mute & Quick Timer Status -->
+      <div class="dock-controls">
+        
+        <!-- Quick Timer Status Badge -->
+        <button type="button" class="dock-timer-badge" id="dock-timer-badge" title="Go to active timer">
+          <span class="dock-timer-dot" id="dock-timer-dot"></span>
+          <span class="dock-timer-digits" id="dock-timer-digits">25:00</span>
+        </button>
+
+        <!-- Master Mute Button -->
+        <button type="button" class="icon-btn dock-mute-btn" id="dock-mute-btn" aria-label="Toggle mute (M)" title="Mute/Unmute (M)">
+          <svg class="vol-icon vol-active" id="dock-vol-icon-active" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+          </svg>
+          <svg class="vol-icon vol-muted" id="dock-vol-icon-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: none;">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+            <line x1="23" y1="9" x2="17" y2="15"/>
+            <line x1="17" y1="9" x2="23" y2="15"/>
+          </svg>
+        </button>
+
+        <!-- Master Volume Range Slider -->
+        <div class="dock-volume-wrap">
+          <label for="master-volume-slider" class="sr-only">Master Volume</label>
+          <input type="range" class="apple-range" id="master-volume-slider" min="0" max="100" value="75" aria-valuemin="0" aria-valuemax="100" aria-valuenow="75" aria-label="Master Volume">
+        </div>
+
+      </div>
+
+    </div>
+  </aside>
+
+  <!-- Settings Dialog (Modal with closedby="any" and light-dismiss fallback) -->
+  <dialog id="settings-dialog" closedby="any" aria-labelledby="settings-title">
+    <div class="dialog-sheet">
+      <header class="dialog-header">
+        <h2 id="settings-title" class="dialog-title">Settings</h2>
+        <button type="button" class="dialog-close-btn" id="close-settings-btn" aria-label="Close Settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </header>
+
+      <div class="dialog-body">
+        
+        <!-- Group 1: Timer Durations -->
+        <div class="settings-group">
+          <h3 class="settings-group-title">Timer Durations</h3>
+          
+          <div class="settings-row">
+            <label for="setting-focus-duration" class="setting-label">
+              <span>Focus Session</span>
+              <span class="setting-caption">Recommended: 25 minutes</span>
+            </label>
+            <div class="setting-input-wrap">
+              <input type="number" id="setting-focus-duration" min="1" max="120" value="25" class="setting-number-input">
+              <span class="setting-unit">min</span>
+            </div>
+          </div>
+
+          <div class="settings-row">
+            <label for="setting-short-break" class="setting-label">
+              <span>Short Break</span>
+              <span class="setting-caption">Recommended: 5 minutes</span>
+            </label>
+            <div class="setting-input-wrap">
+              <input type="number" id="setting-short-break" min="1" max="60" value="5" class="setting-number-input">
+              <span class="setting-unit">min</span>
+            </div>
+          </div>
+
+          <div class="settings-row">
+            <label for="setting-long-break" class="setting-label">
+              <span>Long Break</span>
+              <span class="setting-caption">Recommended: 15 minutes</span>
+            </label>
+            <div class="setting-input-wrap">
+              <input type="number" id="setting-long-break" min="1" max="90" value="15" class="setting-number-input">
+              <span class="setting-unit">min</span>
+            </div>
+          </div>
+
+          <div class="settings-row">
+            <label for="setting-long-interval" class="setting-label">
+              <span>Long Break Interval</span>
+              <span class="setting-caption">Focus sessions before a long break</span>
+            </label>
+            <div class="setting-input-wrap">
+              <input type="number" id="setting-long-interval" min="1" max="12" value="4" class="setting-number-input">
+              <span class="setting-unit">rounds</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Group 2: Automation -->
+        <div class="settings-group">
+          <h3 class="settings-group-title">Automation</h3>
+          
+          <div class="settings-row">
+            <label for="setting-auto-breaks" class="setting-label">
+              <span>Auto-Start Breaks</span>
+              <span class="setting-caption">Automatically begin countdown after focus</span>
+            </label>
+            <label class="apple-switch">
+              <input type="checkbox" id="setting-auto-breaks" role="switch">
+              <span class="switch-handle" aria-hidden="true"></span>
+            </label>
+          </div>
+
+          <div class="settings-row">
+            <label for="setting-auto-pomodoro" class="setting-label">
+              <span>Auto-Start Focus Sessions</span>
+              <span class="setting-caption">Automatically start focus after breaks</span>
+            </label>
+            <label class="apple-switch">
+              <input type="checkbox" id="setting-auto-pomodoro" role="switch">
+              <span class="switch-handle" aria-hidden="true"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Group 3: Audio & Feedback -->
+        <div class="settings-group">
+          <h3 class="settings-group-title">Sound & Feedback</h3>
+          
+          <div class="settings-row">
+            <label for="setting-chime-toggle" class="setting-label">
+              <span>Completion Bell</span>
+              <span class="setting-caption">528 Hz Solfeggio singing bowl chime</span>
+            </label>
+            <div class="setting-row-actions">
+              <button type="button" class="btn-preview-chime" id="test-chime-btn" title="Preview Chime">Test</button>
+              <label class="apple-switch">
+                <input type="checkbox" id="setting-chime-toggle" checked role="switch">
+                <span class="switch-handle" aria-hidden="true"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="settings-row">
+            <label for="setting-ticking-toggle" class="setting-label">
+              <span>Analog Wooden Ticking</span>
+              <span class="setting-caption">Subtle synthesized clock tick during focus</span>
+            </label>
+            <label class="apple-switch">
+              <input type="checkbox" id="setting-ticking-toggle" role="switch">
+              <span class="switch-handle" aria-hidden="true"></span>
+            </label>
+          </div>
+
+          <div class="settings-row">
+            <label for="setting-notifications-toggle" class="setting-label">
+              <span>Desktop Notifications</span>
+              <span class="setting-caption">Alert when sessions conclude while tab is backgrounded</span>
+            </label>
+            <label class="apple-switch">
+              <input type="checkbox" id="setting-notifications-toggle" role="switch">
+              <span class="switch-handle" aria-hidden="true"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Group 4: Reset -->
+        <div class="settings-group settings-group-footer">
+          <button type="button" class="btn-danger-outline" id="reset-settings-btn">Reset All Settings to Defaults</button>
+        </div>
+
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Save Custom Mix Dialog -->
+  <dialog id="save-mix-dialog" closedby="any" aria-labelledby="save-mix-title">
+    <div class="dialog-sheet dialog-sheet-compact">
+      <header class="dialog-header">
+        <h2 id="save-mix-title" class="dialog-title">Save Custom Mix</h2>
+        <button type="button" class="dialog-close-btn" id="close-save-mix-btn" aria-label="Cancel">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </header>
+
+      <form id="save-mix-form" class="dialog-form" method="dialog">
+        <div class="dialog-input-group">
+          <label for="mix-name-input" class="dialog-input-label">Mix Name</label>
+          <input type="text" id="mix-name-input" class="apple-text-input" placeholder="e.g. Midnight Rain, Deep Code" maxlength="32" required autofocus>
+          <span class="dialog-input-hint">Saves the current channel volumes and active sounds to your browser storage.</span>
+        </div>
+
+        <div class="dialog-actions-row">
+          <button type="button" class="btn-cancel" id="cancel-save-mix-btn">Cancel</button>
+          <button type="submit" class="btn-confirm" id="confirm-save-mix-btn">Save Mix</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <!-- Confirm Clear History Dialog -->
+  <dialog id="clear-confirm-dialog" closedby="any" aria-labelledby="clear-title">
+    <div class="dialog-sheet dialog-sheet-compact">
+      <header class="dialog-header">
+        <h2 id="clear-title" class="dialog-title">Clear Focus History?</h2>
+      </header>
+      <div class="dialog-body-compact">
+        <p>This will erase all completed Pomodoro records, focus hours, and your current streak. This action cannot be undone.</p>
+      </div>
+      <div class="dialog-actions-row">
+        <button type="button" class="btn-cancel" id="cancel-clear-btn">Cancel</button>
+        <button type="button" class="btn-destructive" id="confirm-clear-btn">Erase History</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Core Scripts -->
+  <script src="storage.js"></script>
+  <script src="audio-engine.js"></script>
+  <script src="timer.js"></script>
+  <script src="script.js"></script>
+
+</body>
+</html>
